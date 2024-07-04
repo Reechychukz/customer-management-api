@@ -51,6 +51,15 @@ namespace Application.Services.Implementations
             _httpCLient = httpCLient;
         }
 
+        /// <summary>
+        /// This method creates a user and fake sends an otp to the console in which the user can use in verifying their phone number
+        /// Every user is given the user role but only the seeded user is given the Admin role
+        /// Activities of users are also saved for security purposes
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="roles"></param>
+        /// <returns></returns>
+        /// <exception cref="RestException"></exception>
         public async Task<SuccessResponse<UserDto>> CreateUser(UserSignupDto model, List<string> roles = null)
         {
             var email = model.Email.Trim().ToLower();
@@ -133,6 +142,12 @@ namespace Application.Services.Implementations
             };
         }
 
+        /// <summary>
+        /// This methos is used to login a user using their email and password
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        /// <exception cref="RestException"></exception>
         public async Task<SuccessResponse<UserLoginResponse>> UserLogin(UserLoginDTO model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
@@ -173,6 +188,15 @@ namespace Application.Services.Implementations
             };
         }
 
+
+        /// <summary>
+        /// This method is used to verify a user phone number by taking in the user id from the token entity and verifying the phone number
+        /// against the phone number provided, also check if token is still valid
+        /// After all checks, set token to invalid
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        /// <exception cref="RestException"></exception>
         public async Task<SuccessResponse<object>> CompleteUserOnboarding(VerifyTokenDTO model)
         {
             var tokenEntity = await _tokenRepository.SingleOrDefaultNoTracking(x => x.OTPToken == model.Token);

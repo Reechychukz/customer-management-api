@@ -22,6 +22,12 @@ namespace Application.Services.Implementations
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// This method utilises the httpclient to make an api call to the given url.
+        /// The api key is specified in the appsettings and it is expected to return an object with the array of bank names in it
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public async Task<SuccessResponse<IEnumerable<ExistingBankDto>>> GetExistingBanks()
         {
             _httpClient.DefaultRequestHeaders.CacheControl = CacheControlHeaderValue.Parse("no-cache");
