@@ -3,6 +3,7 @@ using Application.Helpers;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Infrastructure.Data.DbContext;
@@ -20,8 +21,10 @@ builder.Services.ConfigureJwt(builder.Configuration);
 builder.Services.AddHttpContextAccessor();
 builder.Services.ConfigureRepositoryManager();
 builder.Services.ConfigureIOObjects(builder.Configuration);
-builder.Services.AddControllers()
-    .AddXmlDataContractSerializerFormatters();
+builder.Services.AddControllers(options =>
+{
+    options.OutputFormatters.RemoveType<XmlDataContractSerializerOutputFormatter>();
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
