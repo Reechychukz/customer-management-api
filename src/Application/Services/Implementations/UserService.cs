@@ -199,7 +199,7 @@ namespace Application.Services.Implementations
         /// <exception cref="RestException"></exception>
         public async Task<SuccessResponse<object>> CompleteUserOnboarding(VerifyTokenDTO model)
         {
-            var tokenEntity = await _tokenRepository.SingleOrDefaultNoTracking(x => x.OTPToken == model.Token);
+            var tokenEntity = await _tokenRepository.SingleOrDefaultAsync(x => x.OTPToken == model.Token);
             
             if (tokenEntity == null || tokenEntity.ExpiresAt < DateTime.UtcNow || !tokenEntity.IsValid)
                 throw new RestException(HttpStatusCode.NotFound, ResponseMessages.InvalidToken);
@@ -213,6 +213,11 @@ namespace Application.Services.Implementations
             user.IsVerified = true;
 
             tokenEntity.IsValid = false;
+            tokenEntity.UpdatedAt = DateTime.UtcNow;
+
+            _tokenRepository.Update(tokenEntity);
+
+            await _tokenRepository.SaveChangesAsync();
 
 
             return new SuccessResponse<object>
