@@ -14,6 +14,7 @@ namespace Infrastructure.Repositories.Interfaces
         Task<bool> SaveChangesAsync();
         void Update(TEntity entity);
         Task<TEntity> SingleOrDefault(Expression<Func<TEntity, bool>> predicate);
+        Task<TEntity> SingleOrDefaultAsync(Expression<Func<TEntity, bool>> predicate);
         Task<TEntity> SingleOrDefaultNoTracking(Expression<Func<TEntity, bool>> predicate);
         Task<TEntity> FirstOrDefaultNoTracking(Expression<Func<TEntity, bool>> predicate);
         Task<TEntity> FirstOrDefault(Expression<Func<TEntity, bool>> predicate);

@@ -86,6 +86,11 @@ namespace Infrastructure.Repositories.Implementations
             throw new NotImplementedException();
         }
 
+        public Task<TEntity> SingleOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            return _context.Set<TEntity>().SingleOrDefaultAsync(predicate);
+        }
+
         public Task<TEntity> SingleOrDefaultNoTracking(Expression<Func<TEntity, bool>> predicate)
         {
             return _context.Set<TEntity>().AsNoTracking().SingleOrDefaultAsync(predicate);
@@ -93,7 +98,7 @@ namespace Infrastructure.Repositories.Implementations
 
         public void Update(TEntity entity)
         {
-            throw new NotImplementedException();
+            _context.Entry(entity).State = EntityState.Modified;
         }
 
         public void UpdateRange(IEnumerable<TEntity> entity)
